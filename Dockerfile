@@ -47,7 +47,6 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
 RUN apt-get install -y nginx
 
 # Install latest bundler
-ENV BUNDLE_BIN=
 RUN gem install bundler
 
 # Run as non-privileged user
@@ -61,10 +60,10 @@ COPY Gemfile.lock /opt/app
 
 ENV RAILS_ENV production
 
-USER app
 
 RUN bundle install --deployment --without test,development
 
+USER app
 COPY package.json /opt/app/
 COPY client/package.json /opt/app/client/
 COPY client/customloaders/customfileloader /opt/app/client/customloaders/customfileloader
@@ -104,3 +103,4 @@ USER app
 # Otherwise, assets will be compiled with `rake assets:precompile`.
 # Useful for caching assets between builds.
 RUN script/prepare-assets.sh
+
